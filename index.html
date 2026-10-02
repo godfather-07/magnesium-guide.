@@ -141,6 +141,7 @@ footer{margin-top:72px;padding:28px 0 40px;border-top:1px solid var(--rule);font
 .gate-panel button:hover{background:#15248A}
 .gate-panel button:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
 .gate-panel button[disabled]{opacity:.6;cursor:default}
+.gate-panel .agree{margin-top:16px;font-size:13.5px;line-height:1.45;color:var(--ink)}
 .gate-panel .fine{margin-top:14px;font-size:12px;line-height:1.5;color:var(--muted)}
 .gate-panel .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 </style><script>
@@ -164,9 +165,8 @@ if(!ok&&!/[?&]preview(=|&|$)/.test(location.search))d.classList.add('gated');})(
 <label class="f" for="g-email">Your email</label>
 <input type="email" id="g-email" name="email" autocomplete="email" inputmode="email" required>
 <span class="err" id="e-email" role="alert"></span>
-<label class="chk" for="g-consent"><input type="checkbox" id="g-consent" name="consent" value="yes" required><span>I agree that Dt. Shreya may use my name and email to give me this guide and to contact me about it.</span></label>
-<span class="err" id="e-consent" role="alert"></span>
-<label class="chk" for="g-updates"><input type="checkbox" id="g-updates" name="updates" value="yes"><span>Optional: also send me future updates and new guides.</span></label>
+<p class="agree">By opening the guide, you agree that Dt. Shreya may use your name and email to give you this guide and to contact you about it.</p>
+<input type="hidden" name="consent" value="agreed by continuing">
 <input type="hidden" name="submitted_at" id="g-ts">
 <span class="err" id="e-form" role="alert"></span>
 <button type="submit" id="gate-btn">Open the guide</button>
@@ -261,11 +261,10 @@ if(root.classList.contains('gated')){lock();setTimeout(function(){var n=document
 function setErr(id,msg){var e=document.getElementById(id);if(e)e.textContent=msg||''}
 function validate(){
   var name=form.elements['name'].value.trim(),email=form.elements['email'].value.trim(),ok=true;
-  setErr('e-name','');setErr('e-email','');setErr('e-consent','');setErr('e-form','');
+  setErr('e-name','');setErr('e-email','');setErr('e-form','');
   if(name.length<2){setErr('e-name','Please enter your name.');ok=false}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){setErr('e-email','Please enter a valid email address.');ok=false}
-  if(!form.elements['consent'].checked){setErr('e-consent','Please tick this box to continue.');ok=false}
-  if(!ok){var first=form.querySelector('.err:not(:empty)');if(first){var inp=first.previousElementSibling;if(inp&&inp.focus)inp.focus();else{var c=document.getElementById('g-consent');if(c)c.focus()}}}
+  if(!ok){var first=form.querySelector('.err:not(:empty)');if(first){var inp=first.previousElementSibling;if(inp&&inp.focus)inp.focus()}}
   return ok;
 }
 form.addEventListener('submit',function(ev){
